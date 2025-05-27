@@ -1,7 +1,11 @@
 const { readFileSync } = require('fs');
 
 function gerarFaturaStr(fatura, pecas) {
-  // 🚩 Função extraída
+
+  function getPeca(apresentacao){
+    return pecas[apresentacao.id];
+  }
+
   function calcularTotalApresentacao(apre, peca) {
     let total = 0;
 
@@ -38,8 +42,8 @@ function gerarFaturaStr(fatura, pecas) {
   }).format;
 
   for (let apre of fatura.apresentacoes) {
-    const peca = pecas[apre.id];
-    const total = calcularTotalApresentacao(apre, peca); // ✅ nova função usada aqui
+    const peca = getPeca(apre);
+    const total = calcularTotalApresentacao(apre, peca);
 
     // créditos para próximas contratações
     creditos += Math.max(apre.audiencia - 30, 0);
@@ -64,6 +68,7 @@ const pecas = JSON.parse(readFileSync('./pecas.json'));
 // Execução
 const faturaStr = gerarFaturaStr(faturas, pecas);
 console.log(faturaStr);
+
 
 
   
